@@ -44,11 +44,19 @@ return {
         })
       end,
       ["pyright"] = function ()
+        -- Check for virtual environment in both venv and .venv
+        local python_path = "python3"
+        if vim.fn.executable("venv/bin/python3") == 1 then
+          python_path = "venv/bin/python3"
+        elseif vim.fn.executable(".venv/bin/python3") == 1 then
+          python_path = ".venv/bin/python3"
+        end
+
         lspconfig["pyright"].setup({
           capabilities = capabilities,
           settings = {
             python = {
-              pythonPath = "venv/bin/python3",
+              pythonPath = python_path,
               analysis = {
                 typeCheckingMode = "off",
               },
