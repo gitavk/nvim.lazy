@@ -5,6 +5,10 @@ For plugins:
 ```
 apt install -y fzf ripgrep make gcc
 ```
+For LSP plugins also may be need
+```
+apt install nodejs npm
+```
 
 
 #### After install
