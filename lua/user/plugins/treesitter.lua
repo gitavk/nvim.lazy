@@ -1,22 +1,19 @@
 return {
   "nvim-treesitter/nvim-treesitter",
-  event = "BufReadPost",
+  branch = "main",
+  build = ":TSUpdate",
+  event = { "BufReadPre", "BufNewFile" },
   config = function()
-    local configs = require "nvim-treesitter.configs"
-    configs.setup {
-      ensure_installed = { "lua", "bash", "python" },
-      highlight = {
-        enable = true,       -- false will disable the whole extension
-        disable = { "css" }, -- list of language that will be disabled
-      },
-      autopairs = {
-        enable = true,
-      },
-      indent = { enable = true, disable = { "python", "css" } },
-      context_commentstring = {
-        enable = true,
-        enable_autocmd = false,
-      },
-    }
+    require("nvim-treesitter").install({ "lua", "bash", "python", "markdown", "markdown_inline" })
+
+    vim.api.nvim_create_autocmd("FileType", {
+      pattern = { "lua", "bash", "python", "markdown" },
+      callback = function()
+        vim.treesitter.start()
+        vim.wo.foldmethod = "expr"
+        vim.wo.foldexpr = "v:lua.vim.treesitter.foldexpr()"
+         vim.wo.foldlevel = 99
+      end,
+    })
   end,
 }
